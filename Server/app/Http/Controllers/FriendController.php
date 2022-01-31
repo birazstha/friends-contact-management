@@ -5,13 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FriendStoreRequest;
 use App\Http\Resources\FriendResource;
 use App\Models\Friend;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FriendController extends Controller{
 
-    public function index()
+    public function index(Request $request)
     {
-       $friend = Friend::all();
+        // dd($request->all());
+       $friend = Friend::orderBy('created_at', 'DESC')->get();
+       if($request->search){
+        $friend = Friend::where('name','LIKE','%'.$request->search.'%')->get();
+        }
+        // else{
+        //     $friend = "No friend found";
+        // }
+
+        
        return FriendResource::collection($friend);
 
     }
@@ -35,7 +45,7 @@ class FriendController extends Controller{
 
     public function edit(Friend $friend)
     {
-        //
+  //
     }
 
 
@@ -53,5 +63,10 @@ class FriendController extends Controller{
     {
         $friend->delete();
         return response()->json();
+    }
+
+    public function home(Friend $friend){
+        $friend = Friend::count();
+        return response()->json($friend);
     }
 }

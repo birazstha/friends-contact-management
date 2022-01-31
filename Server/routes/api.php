@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\FriendController;
+use App\Models\Friend;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,9 @@ use \App\Http\Controllers\FriendController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//geting 
+Route::get('/home',[FriendController::class,'home']);
+
 
 Route::apiResource('friends',FriendController::class);
