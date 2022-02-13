@@ -6,34 +6,37 @@ use App\Http\Requests\FriendStoreRequest;
 use App\Http\Resources\FriendResource;
 use App\Models\Friend;
 use App\Models\User;
+use Faker\Provider\Image;
 use Illuminate\Http\Request;
+
+use function GuzzleHttp\Promise\all;
 
 class FriendController extends Controller{
 
-    public function index(Request $request)
-    {
-        // dd($request->all());
+    public function index(Request $request){
        $friend = Friend::orderBy('created_at', 'DESC')->get();
        if($request->search){
         $friend = Friend::where('name','LIKE','%'.$request->search.'%')->get();
         }
-        // else{
-        //     $friend = "No friend found";
-        // }
-
-        
        return FriendResource::collection($friend);
 
     }
 
-    public function create()
+    public function store(Request $request)
     {
-        //
-    }
 
-    public function store(FriendStoreRequest $request)
-    {
-        $friend= Friend::create($request->validated());
+
+        // $file=$request->file('profile_name');
+
+        // $fileName = time().'.'.$file->getClientOriginalName();
+        // $file->move(public_path('uploads'),$fileName);
+       
+
+        $file = base64_encode(file_get_contents($request->file('profile_name')->path()));
+        $request->request->add(['profile_picture'=>$file]);
+
+
+        $friend= Friend::create($request->all());
         return response()->json($friend);
     }
 
@@ -53,12 +56,7 @@ class FriendController extends Controller{
        $friend->update($request->validated());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Friend  $friend
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Friend $friend)
     {
         $friend->delete();

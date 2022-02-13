@@ -14,6 +14,8 @@ class FriendResource extends JsonResource
             'name'=>$this->name,
             'address'=>$this->address,
             'email'=>$this->email,
+            'contact_number'=>$this->contact_number,
+            'profile_picture'=>$this->profile_picture,
 
         ];
     }

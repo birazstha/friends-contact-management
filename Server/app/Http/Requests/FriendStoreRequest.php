@@ -21,7 +21,10 @@ class FriendStoreRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required',
-            'address'=>'required'
+            'address'=>'required',
+            'contact_number'=>'required',
+            // 'profile_picture'=>'required'
+         
         ];
     }
 }
